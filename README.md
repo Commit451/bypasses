@@ -6,9 +6,23 @@ Repackaging of Bypass to allow for direct gradle dependencies
 # Gradle Dependency
 Easily reference the library in your Android projects using this dependency in your module's `build.gradle` file:
 
-```Gradle
+# Gradle Dependency
+
+Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
+
+```gradle
+allprojects {
+	repositories {
+		...
+		maven { url "https://jitpack.io" }
+	}
+}
+```
+
+Then, add the library to your project `build.gradle`
+```gradle
 dependencies {
-    compile 'com.commit451:bypasses:1.0.1'
+    compile 'com.github.Commit451:YouTubeExtractor:0.0.1'
 }
 ```
 
