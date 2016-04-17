@@ -6,15 +6,15 @@ import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.ResponseBody;
-
 import in.uncod.android.bypass.Bypass;
-import retrofit.Call;
-import retrofit.Retrofit;
-import retrofit.http.GET;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
 
 public class MainActivity extends AppCompatActivity {
-
 
     public interface GitHubService {
         @GET("/Uncodin/bypass/master/README.md")
@@ -35,10 +35,11 @@ public class MainActivity extends AppCompatActivity {
         final TextView textView = (TextView) findViewById(R.id.text);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        service.getMarkdown().enqueue(new retrofit.Callback<ResponseBody>() {
+        service.getMarkdown().enqueue(new Callback<ResponseBody>() {
+
             @Override
-            public void onResponse(retrofit.Response<ResponseBody> response) {
-                if (response.isSuccess()) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
                     Bypass bypass = new Bypass(MainActivity.this);
                     try {
                         textView.setText(bypass.markdownToSpannable(response.body().string()));
@@ -49,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(MainActivity.this, "Failed to load Markdown", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Failed to load Markdown", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
     }
