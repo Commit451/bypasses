@@ -29,6 +29,9 @@ dependencies {
 # Usage
 See http://uncodin.github.io/bypass/
 
+# Robolectric
+See [this issue](https://github.com/Commit451/bypasses/issues/2) for an explination for getting Robolectric to work.
+
 License
 --------
 
