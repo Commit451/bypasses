@@ -26,11 +26,12 @@ dependencies {
 }
 ```
 
+This library is provided as a "fat" aar with native binaries for all available architectures. To
+reduce your APK size, use the ABI filtering/splitting techniques in the Android plugin:
+http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
+
 # Usage
 See http://uncodin.github.io/bypass/
-
-# ABI Splits
-This library ships multiple versions of the bypass `.so` library for various CPU architectures. If you want to reduce or exclude some architectures because they are not supported, you can use [Apk Splits](http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits) within your app
 
 # Robolectric
 See [this issue](https://github.com/Commit451/bypasses/issues/2) for an explination for getting Robolectric to work.
