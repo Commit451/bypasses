@@ -36,6 +36,9 @@ See http://uncodin.github.io/bypass/
 # Robolectric
 See [this issue](https://github.com/Commit451/bypasses/issues/2) for an explination for getting Robolectric to work.
 
+# Proguard
+This dependency also packages the Proguard rules [suggested](https://github.com/Uncodin/bypass/issues/195) for bypass to work properly with Proguard enabled
+
 License
 --------
 
