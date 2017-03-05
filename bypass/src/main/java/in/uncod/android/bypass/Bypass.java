@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.QuoteSpan;
@@ -18,6 +19,8 @@ import android.text.style.URLSpan;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.util.TypedValue;
+import android.view.View;
+
 import in.uncod.android.bypass.Element.Type;
 import in.uncod.android.bypass.style.HorizontalLineSpan;
 
@@ -41,9 +44,10 @@ public class Bypass {
 	// Keeps track of the ordered list number for each LIST element.
 	// We need to track multiple ordered lists at once because of nesting.
 	private final Map<Element, Integer> mOrderedListNumber = new ConcurrentHashMap<Element, Integer>();
+	private ImageSpanClickListener mClickListener;
 
 	/**
-	 * @deprecated Use {@link #Bypass(Context)} instead.
+	 * @deprecated Use {@link #Bypass(Context, ImageSpanClickListener)} instead.
 	 */
 	@Deprecated
 	public Bypass() {
@@ -56,12 +60,13 @@ public class Bypass {
 		mHruleTopBottomPadding = 20;
 	}
 
-	public Bypass(Context context) {
-		this(context, new Options());
+	public Bypass(Context context, ImageSpanClickListener mClickListener) {
+		this(context, new Options(), mClickListener);
 	}
 
-	public Bypass(Context context, Options options) {
+	public Bypass(Context context, Options options, ImageSpanClickListener mClickListener) {
 		mOptions = options;
+		mClickListener = mClickListener;
 
 		DisplayMetrics dm = context.getResources().getDisplayMetrics();
 
@@ -121,7 +126,7 @@ public class Bypass {
 
 		int size = element.size();
 		CharSequence[] spans = new CharSequence[size];
-		
+
 		for (int i = 0; i < size; i++) {
 			spans[i] = recurseElement(element.children[i], i, size, imageGetter);
 		}
@@ -200,7 +205,7 @@ public class Bypass {
 
 		builder.append(text);
 		builder.append(concat);
-		
+
 		// Don't auto-append whitespace after last item in document. The 'numberOfSiblings'
 		// is the number of children the parent of the current element has (including the
 		// element itself), hence subtracting a number from that count gives us the index
@@ -279,7 +284,7 @@ public class Bypass {
 				break;
 			case IMAGE:
 				if (imageDrawable != null) {
-					setSpan(builder, new ImageSpan(imageDrawable));
+					setClickableImageSpan(builder, new ImageSpan(imageDrawable), imageDrawable);
 				}
 				break;
 		}
@@ -295,6 +300,19 @@ public class Bypass {
 	private static void setBlockSpan(SpannableStringBuilder builder, Object what) {
 		int length = Math.max(0, builder.length() - 1);
 		builder.setSpan(what, 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	}
+
+	private void setClickableImageSpan(final SpannableStringBuilder builder, Object what,
+											  final Drawable imageDrawable) {
+		builder.setSpan(what, 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		builder.setSpan(new ClickableSpan() {
+			@Override
+			public void onClick(View widget) {
+				if (mClickListener != null) {
+					mClickListener.onImageClicked(imageDrawable);
+				}
+			}
+		}, 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	/**

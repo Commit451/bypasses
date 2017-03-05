@@ -1,5 +1,6 @@
 package com.commit451.bypass.sample;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import in.uncod.android.bypass.Bypass;
+import in.uncod.android.bypass.ImageSpanClickListener;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,7 +16,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ImageSpanClickListener {
 
     public interface GitHubService {
         @GET("/Uncodin/bypass/master/README.md")
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Bypass bypass = new Bypass(MainActivity.this);
+                    Bypass bypass = new Bypass(MainActivity.this, MainActivity.this);
                     try {
                         textView.setText(bypass.markdownToSpannable(response.body().string()));
                     } catch (Exception e) {
@@ -55,5 +57,10 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             }
         });
+    }
+
+    @Override
+    public void onImageClicked(Drawable drawable) {
+        //Respond to clicks
     }
 }
