@@ -1,11 +1,16 @@
 package com.commit451.bypass.sample;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ImageSpan;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.commit451.bypasspicassoimagegetter.BypassPicassoImageGetter;
+import com.squareup.picasso.Picasso;
 
 import in.uncod.android.bypass.Bypass;
 import in.uncod.android.bypass.ImageSpanClickListener;
@@ -16,10 +21,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 
-public class MainActivity extends AppCompatActivity implements ImageSpanClickListener {
+public class MainActivity extends AppCompatActivity {
 
     public interface GitHubService {
-        @GET("/Uncodin/bypass/master/README.md")
+        @GET("Commit451/LabCoat/raw/master/README.md")
         Call<ResponseBody> getMarkdown();
     }
 
@@ -27,9 +32,10 @@ public class MainActivity extends AppCompatActivity implements ImageSpanClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final ViewGroup root = (ViewGroup) findViewById(R.id.root);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://raw.githubusercontent.com")
+                .baseUrl("https://gitlab.com/")
                 .build();
 
         GitHubService service = retrofit.create(GitHubService.class);
@@ -42,11 +48,23 @@ public class MainActivity extends AppCompatActivity implements ImageSpanClickLis
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    Bypass bypass = new Bypass(MainActivity.this, MainActivity.this);
+                    Bypass bypass = new Bypass(MainActivity.this);
+                    bypass.setImageSpanClickListener(new ImageSpanClickListener() {
+                        @Override
+                        public void onImageClicked(ImageSpan imageSpan, String url) {
+                            Snackbar.make(root, "Image clicked with url: " + url, Snackbar.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
                     try {
-                        textView.setText(bypass.markdownToSpannable(response.body().string()));
+                        String content = response.body().string();
+                        textView.setText(bypass.markdownToSpannable(content,
+                                new BypassPicassoImageGetter(textView, Picasso.with(MainActivity.this))));
                     } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, "Failed to load Markdown", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(root, "Failed to load Markdown", Snackbar.LENGTH_INDEFINITE)
+                                .show();
+                    } finally {
+                        response.body().close();
                     }
                 }
             }
@@ -57,10 +75,5 @@ public class MainActivity extends AppCompatActivity implements ImageSpanClickLis
                         .show();
             }
         });
-    }
-
-    @Override
-    public void onImageClicked(Drawable drawable) {
-        //Respond to clicks
     }
 }

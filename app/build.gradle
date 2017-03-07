@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.commit451.bypass.sample"
-        minSdkVersion 9
-        targetSdkVersion 24
+        minSdkVersion 15
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -24,7 +24,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile('com.github.Commit451:BypassPicassoImageGetter:1.1.1') {
+        exclude group: 'com.github.Commit451', module: 'bypasses'
+    }
     compile project(':bypass')
 }

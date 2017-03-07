@@ -1,5 +1,5 @@
 # bypasses
-Repackaging of Bypass to allow for direct gradle dependencies
+Repackaging of Bypass with additional features
 
 [![Build Status](https://travis-ci.org/Commit451/bypasses.svg?branch=master)](https://travis-ci.org/Commit451/bypasses)
 
@@ -22,7 +22,7 @@ allprojects {
 Then, add the library to your project `build.gradle`
 ```gradle
 dependencies {
-    compile 'com.github.Commit451:bypasses:1.0.4'
+    compile 'com.github.Commit451:bypasses:latest.release.here'
 }
 ```
 
@@ -31,7 +31,23 @@ reduce your APK size, use the ABI filtering/splitting techniques in the Android 
 http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
 
 # Usage
-See http://uncodin.github.io/bypass/
+See the [bypass docs](http://uncodin.github.io/bypass/)
+
+Additional features include:
+- Image click detection
+```java
+bypass.setImageSpanClickListener(new ImageSpanClickListener() {
+    @Override
+    public void onImageClicked(ImageSpan imageSpan, String url) {
+        Snackbar.make(root, "Image clicked with url: " + url, Snackbar.LENGTH_LONG)
+                .show();
+    }
+});
+```
+See the sample for more.
+
+# Image Loading
+Image loading can be done via the `ImageGetter` interface. Libraries exist for [Picasso](https://github.com/Commit451/BypassPicassoImageGetter) and [Glide](https://github.com/Commit451/BypassGlideImageGetter).
 
 # Robolectric
 See [this issue](https://github.com/Commit451/bypasses/issues/2) for an explination for getting Robolectric to work.

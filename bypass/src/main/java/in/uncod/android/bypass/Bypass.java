@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -43,30 +44,15 @@ public class Bypass {
 
 	// Keeps track of the ordered list number for each LIST element.
 	// We need to track multiple ordered lists at once because of nesting.
-	private final Map<Element, Integer> mOrderedListNumber = new ConcurrentHashMap<Element, Integer>();
-	private ImageSpanClickListener mClickListener;
+	private final Map<Element, Integer> mOrderedListNumber = new ConcurrentHashMap<>();
+	private ImageSpanClickListener mImageSpanClickListener;
 
-	/**
-	 * @deprecated Use {@link #Bypass(Context, ImageSpanClickListener)} instead.
-	 */
-	@Deprecated
-	public Bypass() {
-		// Default constructor for backwards-compatibility
-		mOptions = new Options();
-		mListItemIndent = 20;
-		mBlockQuoteIndent = 10;
-		mCodeBlockIndent = 10;
-		mHruleSize = 2;
-		mHruleTopBottomPadding = 20;
+	public Bypass(Context context) {
+		this(context, new Options());
 	}
 
-	public Bypass(Context context, ImageSpanClickListener mClickListener) {
-		this(context, new Options(), mClickListener);
-	}
-
-	public Bypass(Context context, Options options, ImageSpanClickListener mClickListener) {
+	public Bypass(Context context, Options options) {
 		mOptions = options;
-		mClickListener = mClickListener;
 
 		DisplayMetrics dm = context.getResources().getDisplayMetrics();
 
@@ -85,11 +71,15 @@ public class Bypass {
 		mHruleTopBottomPadding = (int) dm.density * 10;
 	}
 
+	public void setImageSpanClickListener(ImageSpanClickListener listener) {
+		mImageSpanClickListener = listener;
+	}
+
 	public CharSequence markdownToSpannable(String markdown) {
 		return markdownToSpannable(markdown, null);
 	}
 
-	public CharSequence markdownToSpannable(String markdown, ImageGetter imageGetter) {
+	public CharSequence markdownToSpannable(String markdown, @Nullable ImageGetter imageGetter) {
 		Document document = processMarkdown(markdown);
 
 		int size = document.getElementCount();
@@ -150,8 +140,9 @@ public class Bypass {
 		// Retrieve the image now so we know whether we're going to have something to display later
 		// If we don't, then show the alt text instead (if available).
 		Drawable imageDrawable = null;
-		if (type == Type.IMAGE && imageGetter != null && !TextUtils.isEmpty(element.getAttribute("link"))) {
-			imageDrawable = imageGetter.getDrawable(element.getAttribute("link"));
+        String imageLink = element.getAttribute("link");
+		if (type == Type.IMAGE && imageGetter != null && !TextUtils.isEmpty(imageLink)) {
+			imageDrawable = imageGetter.getDrawable(imageLink);
 		}
 
 		switch (type) {
@@ -284,7 +275,7 @@ public class Bypass {
 				break;
 			case IMAGE:
 				if (imageDrawable != null) {
-					setClickableImageSpan(builder, new ImageSpan(imageDrawable), imageDrawable);
+					setClickableImageSpan(builder, new ImageSpan(imageDrawable), imageLink);
 				}
 				break;
 		}
@@ -302,14 +293,15 @@ public class Bypass {
 		builder.setSpan(what, 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
-	private void setClickableImageSpan(final SpannableStringBuilder builder, Object what,
-											  final Drawable imageDrawable) {
+	private void setClickableImageSpan(final SpannableStringBuilder builder, final ImageSpan what,
+											  final String link) {
 		builder.setSpan(what, 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		builder.setSpan(new ClickableSpan() {
+
 			@Override
 			public void onClick(View widget) {
-				if (mClickListener != null) {
-					mClickListener.onImageClicked(imageDrawable);
+				if (mImageSpanClickListener != null) {
+					mImageSpanClickListener.onImageClicked(what, link);
 				}
 			}
 		}, 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -418,12 +410,11 @@ public class Bypass {
 	/**
 	 * Retrieves images for markdown images.
 	 */
-	public static interface ImageGetter {
+	public interface ImageGetter {
 
 		/**
 		 * This method is called when the parser encounters an image tag.
 		 */
-		public Drawable getDrawable(String source);
-
+		Drawable getDrawable(String source);
 	}
 }

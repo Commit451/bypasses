@@ -3,11 +3,11 @@ package in.uncod.android.bypass;
 import java.util.Map;
 import java.util.HashMap;
 
-public class Element {
+class Element {
 
-	public static final int F_LIST_ORDERED = 1;
+	static final int F_LIST_ORDERED = 1;
 
-	public enum Type {
+	enum Type {
 		
 		// Block Element Types
 		
