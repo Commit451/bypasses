@@ -11,7 +11,7 @@ public interface ImageSpanClickListener {
      * Indicates that an image span has been clicked
      *
      * @param imageSpan the imageSpan
-     * @param span the string
+     * @param span      the string
      */
     void onImageClicked(ImageSpan imageSpan, String span);
 }
