@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
@@ -304,8 +305,10 @@ public class Bypass {
 				if (mImageSpanClickListener != null) {
 					mImageSpanClickListener.onImageClicked(what, link);
 				}
+                //http://stackoverflow.com/questions/5595785/highlight-on-clickablespan-click
+                widget.invalidate();
 			}
-		}, 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }, 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	/**
