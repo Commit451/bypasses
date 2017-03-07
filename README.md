@@ -1,12 +1,9 @@
 # bypasses
 Repackaging of Bypass with additional features
 
-[![Build Status](https://travis-ci.org/Commit451/bypasses.svg?branch=master)](https://travis-ci.org/Commit451/bypasses)
+[![Build Status](https://travis-ci.org/Commit451/bypasses.svg?branch=master)](https://travis-ci.org/Commit451/bypasses) [![](https://jitpack.io/v/Commit451/bypasses.svg)](https://jitpack.io/#Commit451/bypasses)
 
-# Gradle Dependency
-Easily reference the library in your Android projects using this dependency in your module's `build.gradle` file:
-
-# Gradle Dependency
+## Gradle Dependency
 
 Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
 
@@ -30,7 +27,7 @@ This library is provided as a "fat" aar with native binaries for all available a
 reduce your APK size, use the ABI filtering/splitting techniques in the Android plugin:
 http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
 
-# Usage
+## Usage
 See the [bypass docs](http://uncodin.github.io/bypass/)
 
 Additional features include:
@@ -46,13 +43,13 @@ bypass.setImageSpanClickListener(new ImageSpanClickListener() {
 ```
 See the sample for more.
 
-# Image Loading
+## Image Loading
 Image loading can be done via the `ImageGetter` interface. Libraries exist for [Picasso](https://github.com/Commit451/BypassPicassoImageGetter) and [Glide](https://github.com/Commit451/BypassGlideImageGetter).
 
-# Robolectric
+## Robolectric
 See [this issue](https://github.com/Commit451/bypasses/issues/2) for an explination for getting Robolectric to work.
 
-# Proguard
+## Proguard
 This dependency also packages the Proguard rules [suggested](https://github.com/Uncodin/bypass/issues/195) for bypass to work properly with Proguard enabled
 
 License
