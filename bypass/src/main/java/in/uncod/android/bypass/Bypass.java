@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -47,11 +48,11 @@ public class Bypass {
 	private final Map<Element, Integer> mOrderedListNumber = new ConcurrentHashMap<>();
 	private ImageSpanClickListener mImageSpanClickListener;
 
-	public Bypass(Context context) {
+	public Bypass(@NonNull Context context) {
 		this(context, new Options());
 	}
 
-	public Bypass(Context context, Options options) {
+	public Bypass(@NonNull Context context, @NonNull Options options) {
 		mOptions = options;
 
 		DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -75,11 +76,11 @@ public class Bypass {
 		mImageSpanClickListener = listener;
 	}
 
-	public CharSequence markdownToSpannable(String markdown) {
+	public CharSequence markdownToSpannable(@NonNull String markdown) {
 		return markdownToSpannable(markdown, null);
 	}
 
-	public CharSequence markdownToSpannable(String markdown, @Nullable ImageGetter imageGetter) {
+	public CharSequence markdownToSpannable(@NonNull String markdown, @Nullable ImageGetter imageGetter) {
 		Document document = processMarkdown(markdown);
 
 		int size = document.getElementCount();
@@ -414,6 +415,8 @@ public class Bypass {
 
 		/**
 		 * This method is called when the parser encounters an image tag.
+         * @param source the source url
+         * @return the drawable
 		 */
 		Drawable getDrawable(String source);
 	}
