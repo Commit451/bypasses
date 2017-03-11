@@ -35,7 +35,7 @@ Additional features include:
 ```java
 bypass.setImageSpanClickListener(new ImageSpanClickListener() {
     @Override
-    public void onImageClicked(ImageSpan imageSpan, String url) {
+    public void onImageClicked(View view, ImageSpan imageSpan, String url) {
         Snackbar.make(root, "Image clicked with url: " + url, Snackbar.LENGTH_LONG)
                 .show();
     }
