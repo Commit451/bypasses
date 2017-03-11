@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     Bypass bypass = new Bypass(MainActivity.this);
                     bypass.setImageSpanClickListener(new ImageSpanClickListener() {
                         @Override
-                        public void onImageClicked(ImageSpan imageSpan, String url) {
+                        public void onImageClicked(View view, ImageSpan imageSpan, String url) {
                             Snackbar.make(root, "Image clicked with url: " + url, Snackbar.LENGTH_LONG)
                                     .show();
                         }

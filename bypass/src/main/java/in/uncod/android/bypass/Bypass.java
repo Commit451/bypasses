@@ -298,7 +298,7 @@ public class Bypass {
             @Override
             public void onClick(View widget) {
                 if (mImageSpanClickListener != null) {
-                    mImageSpanClickListener.onImageClicked(what, link);
+                    mImageSpanClickListener.onImageClicked(widget, what, link);
                 }
                 //http://stackoverflow.com/questions/5595785/highlight-on-clickablespan-click
                 widget.invalidate();
