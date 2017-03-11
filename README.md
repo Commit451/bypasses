@@ -1,5 +1,5 @@
 # bypasses
-Repackaging of Bypass with additional features
+Repackaging of [Bypass](https://github.com/Uncodin/bypass) with additional features
 
 [![Build Status](https://travis-ci.org/Commit451/bypasses.svg?branch=master)](https://travis-ci.org/Commit451/bypasses) [![](https://jitpack.io/v/Commit451/bypasses.svg)](https://jitpack.io/#Commit451/bypasses)
 
@@ -47,7 +47,7 @@ See the sample for more.
 Image loading can be done via the `ImageGetter` interface. Libraries exist for [Picasso](https://github.com/Commit451/BypassPicassoImageGetter) and [Glide](https://github.com/Commit451/BypassGlideImageGetter).
 
 ## Robolectric
-See [this issue](https://github.com/Commit451/bypasses/issues/2) for an explination for getting Robolectric to work.
+See [this issue](https://github.com/Commit451/bypasses/issues/2) for an explanation for getting Robolectric to work.
 
 ## Proguard
 This dependency also packages the Proguard rules [suggested](https://github.com/Uncodin/bypass/issues/195) for bypass to work properly with Proguard enabled
@@ -55,7 +55,7 @@ This dependency also packages the Proguard rules [suggested](https://github.com/
 License
 --------
 
-    Copyright 2015 Commit 451
+    Copyright 2017 Commit 451
     Copyright 2015 Uncodin
 
     Licensed under the Apache License, Version 2.0 (the "License");
