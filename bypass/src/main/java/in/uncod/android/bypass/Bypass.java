@@ -25,7 +25,9 @@ import android.util.TypedValue;
 import android.view.View;
 
 import in.uncod.android.bypass.Element.Type;
+import in.uncod.android.bypass.style.CharacterIndentSpan;
 import in.uncod.android.bypass.style.HorizontalLineSpan;
+import in.uncod.android.bypass.style.NumberIndentSpan;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -157,17 +159,6 @@ public class Bypass {
             case LINEBREAK:
                 builder.append("\n");
                 break;
-            case LIST_ITEM:
-                builder.append(" ");
-                if (mOrderedListNumber.containsKey(element.getParent())) {
-                    int number = mOrderedListNumber.get(element.getParent());
-                    builder.append(Integer.toString(number) + ".");
-                    mOrderedListNumber.put(element.getParent(), number + 1);
-                } else {
-                    builder.append(mOptions.mUnorderedListItem);
-                }
-                builder.append("  ");
-                break;
             case AUTOLINK:
                 builder.append(element.getAttribute("link"));
                 break;
@@ -229,8 +220,14 @@ public class Bypass {
                 setSpan(builder, new RelativeSizeSpan(mOptions.mHeaderSizes[level - 1]));
                 setSpan(builder, new StyleSpan(Typeface.BOLD));
                 break;
-            case LIST:
-                setBlockSpan(builder, new LeadingMarginSpan.Standard(mListItemIndent));
+            case LIST_ITEM:
+                if (mOrderedListNumber.containsKey(element.getParent())) {
+                    int number = mOrderedListNumber.get(element.getParent());
+                    mOrderedListNumber.put(element.getParent(), number + 1);
+                    setSpan(builder, new NumberIndentSpan(mListItemIndent, number));
+                } else {
+                    setSpan(builder, new CharacterIndentSpan(mListItemIndent, mOptions.mUnorderedListItem));
+                }
                 break;
             case EMPHASIS:
                 setSpan(builder, new StyleSpan(Typeface.ITALIC));
@@ -339,7 +336,7 @@ public class Bypass {
 
             mUnorderedListItem = "\u2022";
             mListItemIndentUnit = TypedValue.COMPLEX_UNIT_DIP;
-            mListItemIndentSize = 10;
+            mListItemIndentSize = 20;
 
             mBlockQuoteColor = 0xff0000ff;
             mBlockQuoteIndentUnit = TypedValue.COMPLEX_UNIT_DIP;
