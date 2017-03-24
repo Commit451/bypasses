@@ -28,6 +28,7 @@ import in.uncod.android.bypass.Element.Type;
 import in.uncod.android.bypass.style.CharacterIndentSpan;
 import in.uncod.android.bypass.style.HorizontalLineSpan;
 import in.uncod.android.bypass.style.NumberIndentSpan;
+import in.uncod.android.bypass.style.ParagraphSpacingSpan;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,6 +41,7 @@ public class Bypass {
     private final Options mOptions;
 
     private final int mListItemIndent;
+    private final int mListItemBottomSpace;
     private final int mBlockQuoteIndent;
     private final int mCodeBlockIndent;
     private final int mHruleSize;
@@ -62,6 +64,9 @@ public class Bypass {
 
         mListItemIndent = (int) TypedValue.applyDimension(mOptions.mListItemIndentUnit,
                 mOptions.mListItemIndentSize, dm);
+
+        mListItemBottomSpace = (int) TypedValue.applyDimension(mOptions.mListItemBottomSpaceUnit,
+                mOptions.mListItemBottomSpaceSize, dm);
 
         mBlockQuoteIndent = (int) TypedValue.applyDimension(mOptions.mBlockQuoteIndentUnit,
                 mOptions.mBlockQuoteIndentSize, dm);
@@ -228,6 +233,7 @@ public class Bypass {
                 } else {
                     setSpan(builder, new CharacterIndentSpan(mListItemIndent, mOptions.mUnorderedListItem));
                 }
+                setSpan(builder, new ParagraphSpacingSpan(mListItemBottomSpace));
                 break;
             case EMPHASIS:
                 setSpan(builder, new StyleSpan(Typeface.ITALIC));
@@ -313,6 +319,9 @@ public class Bypass {
         private int mListItemIndentUnit;
         private float mListItemIndentSize;
 
+        private int mListItemBottomSpaceUnit;
+        private float mListItemBottomSpaceSize;
+
         private int mBlockQuoteColor;
         private int mBlockQuoteIndentUnit;
         private float mBlockQuoteIndentSize;
@@ -337,6 +346,9 @@ public class Bypass {
             mUnorderedListItem = "\u2022";
             mListItemIndentUnit = TypedValue.COMPLEX_UNIT_DIP;
             mListItemIndentSize = 20;
+
+            mListItemBottomSpaceUnit = TypedValue.COMPLEX_UNIT_DIP;
+            mListItemBottomSpaceSize = 5;
 
             mBlockQuoteColor = 0xff0000ff;
             mBlockQuoteIndentUnit = TypedValue.COMPLEX_UNIT_DIP;
